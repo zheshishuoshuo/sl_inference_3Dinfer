@@ -12,10 +12,10 @@ from .make_tabulate import LensGrid, tabulate_likelihood_grids
 from .mock_generator.mass_sampler import MODEL_PARAMS
 from .config import SCATTER
 
-# Parameters describing the halo-mass relation used in the mock generator
-# Values from the mock generator are still used for the stellar-mass and size
-# relations but the halo–mass relation parameters (``beta_DM`` and
-# ``sigma_DM``) are now treated as hyper-parameters of the inference model.
+# Parameters describing the halo-mass relation used in the mock generator.
+# ``beta_DM`` is no longer treated as a free parameter and is fixed to the
+# value used to generate the mock data.
+BETA_DM = 2.04
 MODEL_P = MODEL_PARAMS["deVauc"]
 
 # Convenience wrapper ---------------------------------------------------------
@@ -44,12 +44,11 @@ def precompute_grids(
 # Priors ---------------------------------------------------------------------
 
 def log_prior(theta: Sequence[float]) -> float:
-    """Flat prior on ``(muDM, betaDM, sigmaDM, alpha)`` within broad bounds."""
+    """Flat prior on ``(muDM, sigmaDM, alpha)`` within broad bounds."""
 
-    muDM, betaDM, sigmaDM, alpha = theta
+    muDM, sigmaDM, alpha = theta
     if not (
         12.6 < muDM < 13.2
-        and 1.8 < betaDM < 2.2
         and 0.27 < sigmaDM < 0.47
         and 0.1 < alpha < 0.2
     ):
@@ -57,7 +56,6 @@ def log_prior(theta: Sequence[float]) -> float:
     return 0.0
 
     # mu_DM_grid = np.linspace(12.6, 13.2, 30)
-    # beta_DM_grid = np.linspace(1.8, 2.2, 10)
     # sigma_DM_grid = np.linspace(0.27, 0.47, 10)
     # alpha_grid = np.linspace(0.1, 0.2, 50)
 
@@ -71,7 +69,8 @@ def _single_lens_likelihood(
 ) -> float:
     """Evaluate the likelihood contribution of one lens."""
 
-    muDM, betaDM, sigmaDM, alpha = theta
+    muDM, sigmaDM, alpha = theta
+    betaDM = BETA_DM
 
     mask = np.isfinite(grid.logM_star) & np.isfinite(grid.sample_factor)
     if not np.any(mask):
@@ -127,10 +126,10 @@ def log_likelihood(
 ) -> float:
     """Joint log-likelihood for all lenses."""
 
-    muDM, betaDM, sigmaDM, alpha = theta
+    muDM, sigmaDM, alpha = theta
 
     try:
-        A_eta = cached_A_interp(muDM, betaDM, sigmaDM, alpha)
+        A_eta = cached_A_interp(muDM, sigmaDM, alpha)
         if not np.isfinite(A_eta) or A_eta <= 0:
             return -np.inf
     except Exception:
