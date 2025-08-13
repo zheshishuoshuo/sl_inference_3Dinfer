@@ -158,7 +158,7 @@ def build_eta_grid():
 
     mu_DM_grid = np.linspace(12.6, 13.2, 30)
     sigma_DM_grid = np.linspace(0.27, 0.47, 30)
-    alpha_grid = np.linspace(0.1, 0.2, 200)
+    alpha_grid = np.linspace(0.1, 0.2, 40)
     return mu_DM_grid, sigma_DM_grid, alpha_grid
 
 # 'mu_h0': 12.91,

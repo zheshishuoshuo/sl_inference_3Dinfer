@@ -111,7 +111,7 @@ def run_mcmc(
     # === 初始化采样起点 ===
     if backend.iteration == 0:
         print("[INFO] 从头开始采样")
-        p0 = initial_guess + 1e-3 * np.random.randn(nwalkers, ndim)
+        p0 = initial_guess + 0.1 * np.random.randn(nwalkers, ndim)
     else:
         print(f"[INFO] 从第 {backend.iteration} 步继续采样")
         p0 = None
