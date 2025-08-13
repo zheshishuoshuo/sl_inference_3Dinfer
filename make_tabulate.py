@@ -1,8 +1,8 @@
 """Pre-compute lensing grids for likelihood evaluation.
 
 This module tabulates, for each observed lens, the quantities that are
-independent of the population hyper-parameters ``(muDM, betaDM, sigmaDM,``
-``alpha)``.  For every lens we solve the lens equation on a grid of halo
+independent of the population hyper-parameters ``(muDM, sigmaDM, alpha)``.
+For every lens we solve the lens equation on a grid of halo
 masses and store the inferred stellar mass and an overall geometric +
 photometric factor used later in the likelihood integral.
 """

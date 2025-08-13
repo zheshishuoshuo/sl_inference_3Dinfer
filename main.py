@@ -39,7 +39,7 @@ def main() -> None:
         logM_sps_obs,
         nsteps=nsteps,
         nwalkers=20,
-        initial_guess=np.array([12.6, model_p["beta_h"], model_p["sigma_h"], 0.2]),
+        initial_guess=np.array([12.6, model_p["sigma_h"], 0.2]),
         backend_file="chains_0.01_0.15.h5",
         parallel=True,
         nproc=mp.cpu_count() - 3,
@@ -51,7 +51,7 @@ def main() -> None:
 
     # 转为 DataFrame 并加上列名
     # param_names = ["param1", "param2", "param3", "param4", "param5"]  # 你可以改成实际参数名
-    param_names = [r"$\mu_{DM}$", r"$\beta_{DM}$", r"$\sigma_{DM}$", r"$\alpha$"]
+    param_names = [r"$\mu_{DM}$", r"$\sigma_{DM}$", r"$\alpha$"]
 
     df_samples = pd.DataFrame(samples, columns=param_names)
 
@@ -65,7 +65,7 @@ def main() -> None:
     # )
 
     # 真值
-    true_values = [model_p["mu_h0"], model_p["beta_h"], model_p["sigma_h"], logalpha]
+    true_values = [model_p["mu_h0"], model_p["sigma_h"], logalpha]
 
     # 绘制 pairplot
     g = sns.pairplot(

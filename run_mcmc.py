@@ -43,8 +43,10 @@ def run_mcmc(
     nwalkers, nsteps:
         MCMC configuration.
     initial_guess:
-        Initial position of the walkers in parameter space.  Must have length 4
-        corresponding to ``(muDM, betaDM, sigmaDM, alpha)``.
+        Initial position of the walkers in parameter space.  Must have length 3
+        corresponding to ``(muDM, sigmaDM, alpha)``.  The slope ``betaDM`` of
+        the halo--mass relation is fixed to the value used to generate the
+        mock data.
     backend_file:
         Filename or path for the HDF5 backend.  If a relative path is
         supplied, the file will be placed inside the ``chains`` directory.  The
@@ -82,12 +84,12 @@ def run_mcmc(
     # return sampler
 
 
-    # Number of parameters in the posterior: ``muDM``, ``betaDM``, ``sigmaDM``
-    # and ``alpha``.
-    ndim = 4
+    # Number of parameters in the posterior: ``muDM``, ``sigmaDM`` and
+    # ``alpha``.  ``betaDM`` is kept fixed.
+    ndim = 3
     if initial_guess is None:
         # A sensible starting point close to the Sonnenfeld+2019 values.
-        initial_guess = np.array([12.5, 2.0, 0.3, 0.1])
+        initial_guess = np.array([12.5, 0.3, 0.1])
 
     # === 使用 pathlib 构建路径 ===
     base_dir = Path(__file__).parent.resolve()
